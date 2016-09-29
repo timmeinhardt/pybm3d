@@ -87,12 +87,13 @@ int run_bm3d(
 ,   const unsigned tau_2D_hard
 ,   const unsigned tau_2D_wien
 ,   const unsigned color_space
+,   const unsigned patch_size
 ){
     //! Parameters
     const unsigned nHard = 16; //! Half size of the search window
     const unsigned nWien = 16; //! Half size of the search window
-    const unsigned kHard = (tau_2D_hard == BIOR || sigma < 40.f ? 8 : 12); //! Must be a power of 2 if tau_2D_hard == BIOR
-    const unsigned kWien = (tau_2D_wien == BIOR || sigma < 40.f ? 8 : 12); //! Must be a power of 2 if tau_2D_wien == BIOR
+    const unsigned kHard = (tau_2D_hard == BIOR || sigma < 40.f ? patch_size : 12); //! Must be a power of 2 if tau_2D_hard == BIOR
+    const unsigned kWien = (tau_2D_wien == BIOR || sigma < 40.f ? patch_size : 12); //! Must be a power of 2 if tau_2D_wien == BIOR
     const unsigned NHard = 16; //! Must be a power of 2
     const unsigned NWien = 32; //! Must be a power of 2
     const unsigned pHard = 3;

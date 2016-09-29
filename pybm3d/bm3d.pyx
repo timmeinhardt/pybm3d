@@ -9,22 +9,23 @@ cdef extern from "../bm3d_src/mt19937ar.h":
     double mt_genrand_res53()
 
 cdef extern from "../bm3d_src/bm3d.h":
-    int run_bm3d( const float sigma, vector[float] &img_noisy, 
+    int run_bm3d( const float sigma, vector[float] &img_noisy,
                   vector[float] &img_basic,
-                  vector[float] &img_denoised, 
-                  const unsigned width, 
-                  const unsigned height, 
-                  const unsigned chnls, 
-                  const bool useSD_h, 
-                  const bool useSD_w, 
-                  const unsigned tau_2D_hard, 
-                  const unsigned tau_2D_wien, 
-                  const unsigned color_space)
+                  vector[float] &img_denoised,
+                  const unsigned width,
+                  const unsigned height,
+                  const unsigned chnls,
+                  const bool useSD_h,
+                  const bool useSD_w,
+                  const unsigned tau_2D_hard,
+                  const unsigned tau_2D_wien,
+                  const unsigned color_space,
+                  const unsigned patch_size)
 
 cdef extern from "../bm3d_src/utilities.h":
-    int save_image(char * name, vector[float] & img, 
-                   const unsigned width, 
-                   const unsigned height, 
+    int save_image(char * name, vector[float] & img,
+                   const unsigned width,
+                   const unsigned height,
                    const unsigned chnls)
 
 
@@ -34,15 +35,17 @@ def hello():
 def random():
     return mt_genrand_res53()
 
-cpdef float[:, :, :] bm3d(float[:, :, :] input_array, 
-                          float sigma, 
-                          bool useSD_h = True, 
-                          bool useSD_w = True, 
-                          str tau_2D_hard = "DCT", 
-                          str tau_2D_wien = "DCT"
+cpdef float[:, :, :] bm3d(float[:, :, :] input_array,
+                          float sigma,
+                          bool useSD_h = True,
+                          bool useSD_w = True,
+                          str tau_2D_hard = "DCT",
+                          str tau_2D_wien = "DCT",
+                          int patch_size=8
                           ):
     """
     sigma: value of assumed noise of the noisy image;
+    patch_size
 
     input_array : input image, H x W x channum
 
@@ -51,7 +54,7 @@ cpdef float[:, :, :] bm3d(float[:, :, :] input_array,
     first (resp. second) step, otherwise use the number
     of non-zero coefficients after Hard Thresholding
     (resp. the norm of Wiener coefficients);
- 
+
     tau_2D_hard (resp. tau_2D_wien): 2D transform to apply
     on every 3D group for the first (resp. second) part.
     Allowed values are 'DCT' and 'BIOR';
@@ -67,7 +70,6 @@ cpdef float[:, :, :] bm3d(float[:, :, :] input_array,
     height = input_array.shape[0]
     width = input_array.shape[1]
     chnls = input_array.shape[2]
-    
 
     # convert the input image
     input_image.resize(input_array.size)
@@ -76,9 +78,9 @@ cpdef float[:, :, :] bm3d(float[:, :, :] input_array,
         for j in range(input_array.shape[1]):
             for k in range(input_array.shape[2]):
                 input_image[pos] = input_array[i, j, k]
-                pos +=1 
+                pos +=1
 
-                
+
     if tau_2D_hard == "DCT":
         tau_2D_hard_i = 4
     elif tau_2D_hard == "BIOR" :
@@ -96,15 +98,15 @@ cpdef float[:, :, :] bm3d(float[:, :, :] input_array,
     # FIXME someday we'll have color support
     color_space = 0
 
-    ret = run_bm3d(sigma, input_image, basic_image, output_image, 
-                   width, height, chnls, 
-                   useSD_h, useSD_w, 
-                   tau_2D_hard_i, tau_2D_wien_i, 
-                   color_space)
+    ret = run_bm3d(sigma, input_image, basic_image, output_image,
+                   width, height, chnls,
+                   useSD_h, useSD_w,
+                   tau_2D_hard_i, tau_2D_wien_i,
+                   color_space, patch_size)
     if ret != 0:
         raise Exception("run_bmd3d returned an error, retval=%d" % ret)
 
-    cdef np.ndarray output_array = np.zeros([height, width, chnls], 
+    cdef np.ndarray output_array = np.zeros([height, width, chnls],
                                             dtype = np.float32)
 
 
@@ -113,8 +115,8 @@ cpdef float[:, :, :] bm3d(float[:, :, :] input_array,
         for j in range(input_array.shape[1]):
             for k in range(input_array.shape[2]):
                 output_array[i, j, k] = output_image[pos]
-                pos +=1 
-    
+                pos +=1
+
     return output_array
 
 

@@ -1,10 +1,10 @@
 Metadata-Version: 1.0
 Name: pybm3d
-Version: 0.0.0
-Summary: UNKNOWN
-Home-page: UNKNOWN
-Author: UNKNOWN
-Author-email: UNKNOWN
+Version: 1.0
+Summary: Python wrapper around BM3d
+Home-page: https://github.com/ericmjonas/pybm3d
+Author: Eric Jonas
+Author-email: jonas@ericjonas.com
 License: UNKNOWN
 Description: UNKNOWN
 Platform: UNKNOWN
