@@ -113,7 +113,7 @@ int run_bm3d(
     unsigned nb_threads = 1;
 
 #ifdef _OPENMP
-    cout << "Open MP used" << endl;
+    //cout << "Open MP used" << endl;
     nb_threads = omp_get_num_procs();
 
     //! In case where the number of processors isn't a power of 2
@@ -121,9 +121,9 @@ int run_bm3d(
         nb_threads = closest_power_of_2(nb_threads);
 #endif
 
-    cout << endl << "Number of threads which will be used: " << nb_threads;
+    //cout << endl << "Number of threads which will be used: " << nb_threads;
 #ifdef _OPENMP
-    cout << " (real available cores: " << omp_get_num_procs() << ")" << endl;
+    //cout << " (real available cores: " << omp_get_num_procs() << ")" << endl;
 #endif
 
     //! Allocate plan for FFTW library
@@ -153,11 +153,11 @@ int run_bm3d(
         }
 
         //! Denoising, 1st Step
-        cout << "step 1...";
+        //cout << "step 1...";
         bm3d_1st_step(sigma, img_sym_noisy, img_sym_basic, w_b, h_b, chnls, nHard,
                       kHard, NHard, pHard, useSD_h, color_space, tau_2D_hard,
                       &plan_2d_for_1[0], &plan_2d_for_2[0], &plan_2d_inv[0]);
-        cout << "done." << endl;
+        //cout << "done." << endl;
 
         //! To avoid boundaries problem
         for (unsigned c = 0; c < chnls; c++)
@@ -183,11 +183,11 @@ int run_bm3d(
         }
 
         //! Denoising, 2nd Step
-        cout << "step 2...";
+        //cout << "step 2...";
         bm3d_2nd_step(sigma, img_sym_noisy, img_sym_basic, img_sym_denoised,
                 w_b, h_b, chnls, nWien, kWien, NWien, pWien, useSD_w, color_space,
                 tau_2D_wien, &plan_2d_for_1[0], &plan_2d_for_2[0], &plan_2d_inv[0]);
-        cout << "done." << endl;
+        //cout << "done." << endl;
 
         //! Obtention of img_denoised
         for (unsigned c = 0; c < chnls; c++)
@@ -225,7 +225,7 @@ int run_bm3d(
             }
 
         //! denoising : 1st Step
-        cout << "step 1...";
+        //cout << "step 1...";
         #pragma omp parallel shared(sub_noisy, sub_basic, w_table, h_table, \
                                     plan_2d_for_1, plan_2d_for_2, plan_2d_inv)
         {
@@ -238,7 +238,7 @@ int run_bm3d(
                               &plan_2d_for_2[n], &plan_2d_inv[n]);
             }
         }
-        cout << "done." << endl;
+        //cout << "done." << endl;
 
         sub_divide(img_basic, sub_basic, w_table, h_table,
                                                 width, height, chnls, 2 * nHard, false);
@@ -260,7 +260,7 @@ int run_bm3d(
             }
 
         //! Denoising: 2nd Step
-        cout << "step 2...";
+        //cout << "step 2...";
         #pragma omp parallel shared(sub_noisy, sub_basic, sub_denoised,  w_table, \
                                     h_table, plan_2d_for_1, plan_2d_for_2,  \
                                     plan_2d_inv)
@@ -274,7 +274,7 @@ int run_bm3d(
                               &plan_2d_for_2[n], &plan_2d_inv[n]);
             }
         }
-        cout << "done." << endl;
+        //cout << "done." << endl;
 
         //! Reconstruction of the image
         sub_divide(img_denoised, sub_denoised, w_table, h_table,
