@@ -1,4 +1,5 @@
 bm3d_src/bm3d.cpp
+bm3d_src/iio.c
 bm3d_src/io_png.c
 bm3d_src/lib_transforms.cpp
 bm3d_src/mt19937ar.c

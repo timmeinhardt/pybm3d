@@ -10,14 +10,14 @@ ext_modules = []
 ext_modules += cythonize([Extension("pybm3d.bm3d",
                                     sources=["pybm3d/bm3d.pyx",
                                              "bm3d_src/mt19937ar.c",
-                                             "bm3d_src/io_png.c",
+                                             "bm3d_src/iio.c",
                                              "bm3d_src/bm3d.cpp",
                                              "bm3d_src/lib_transforms.cpp",
                                              "bm3d_src/utilities.cpp",
                                          ],
                                     language="c++",
                                     include_dirs = [np.get_include()],
-                                    libraries=["png", "fftw3", "fftw3f"],
+                                    libraries=["png", "tiff", "jpeg", "fftw3", "fftw3f"],
                                     extra_objects=["/usr/local/lib/libiomp5.dylib"],
                                     extra_compile_args=["-fopenmp"])])
 
