@@ -24,7 +24,6 @@ ext_modules += cythonize([Extension("pybm3d.bm3d",
 setup(
     name='pybm3d',
     ext_modules=ext_modules,
-
     version='1.0',
     description='Python wrapper around BM3d',
     author='Eric Jonas',
