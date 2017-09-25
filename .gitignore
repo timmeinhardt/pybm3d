@@ -1,6 +1,7 @@
 *~
 *.pyc
 *.so
+.python-version
 build/
 pybm3d/*.cpp
 pybm3d/*.c
