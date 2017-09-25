@@ -1,7 +1,9 @@
+build/
+pybm3d/*.cpp
+pybm3d/*.c
+
 *~
 *.pyc
 *.so
 .python-version
-build/
-pybm3d/*.cpp
-pybm3d/*.c
+__pycahe__
